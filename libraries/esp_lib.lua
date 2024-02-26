@@ -66,6 +66,21 @@ do
         self.cache.box[player] = box
     end
 
+    function esp_lib:remove_esp(player)
+        if (esp_lib.cache.text[player]) then
+            esp_lib.cache.text[player]:Remove()
+            esp_lib.cache.line[player]:Remove()
+
+            for i = 1, 4 do 
+                esp_lib.cache.box[player][i]:Remove()
+            end
+
+            esp_lib.cache.text[player] = nil
+            esp_lib.cache.line[player] = nil
+            esp_lib.cache.box[player] = nil
+        end
+    end
+
     function esp_lib:state(bool)
         self.toggle = bool
     end
@@ -85,19 +100,6 @@ do
     function esp_lib:text_health(bool)
         self.health = bool
     end
-
-    local function on_player()
-        for i, player in pairs(players:GetPlayers()) do 
-            if (i ~= 1) then 
-                esp_lib:add_text(player)
-                esp_lib:add_line(player)
-                esp_lib:add_box(player)
-            end
-        end
-    end
-
-    on_player()
-    players.PlayerAdded:Connect(on_player)
 
     players.PlayerRemoving:Connect(function(player)
         if (esp_lib.cache.text[player]) then
